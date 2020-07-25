@@ -1,7 +1,7 @@
 # ADuserManagement
 Azure AD user management with Dotnet core 
 
-## Steps to run Code :
+## Steps to run code :
 
 Step 1 : Open .sln folder in Visual Studio  
 Step 2 : Change appsetting.json file with your AD account and APP registered Data.  
@@ -11,7 +11,8 @@ Step 4 : You can use any API testing tool to check the api response.
 ## Following are the API Endpoints to test 
 1. **GET** : /api/user
 2. **POST** : /api/user 
-   ```body : {
+   ```
+   body : {
     "AccountEnabled": true,
     "DisplayName": "test3",
     "MailNickname": "testNickName3",
@@ -23,5 +24,6 @@ Step 4 : You can use any API testing tool to check the api response.
     "GivenName": "test3",
     "PasswordPolicies": "DisablePasswordExpiration",
     "Surname": "TestSurname3"
-    }```
+    }
+    ```
 3. **Delete** : /api/user/{id}
