@@ -45,6 +45,10 @@
             "Microsoft.IdentityModel.Clients.ActiveDirectory": {
               "target": "Package",
               "version": "[5.2.8, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.5.1, )"
             }
           },
           "imports": [

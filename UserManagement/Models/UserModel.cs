@@ -34,11 +34,4 @@ namespace UserManagement.Models
         public bool ForceChangePasswordNextSignIn { get; set; }
     }
 
-    public class responseObject
-    {
-        public bool status { get; set; }
-
-        public UserModel data { get; set; }
-    }
-
 }

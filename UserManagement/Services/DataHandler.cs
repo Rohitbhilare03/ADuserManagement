@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Models;
+using UserManagement.Services.Interfaces;
 
 namespace UserManagement.Services
 {
-    public class DataHandler
+    public class DataHandler : IDataHandler
     {
-        public static UserModel UserProperty(Microsoft.Graph.User graphUser)
+        public UserModel UserProperty(User graphUser)
         {
             UserModel user = new UserModel();
             user.Id = graphUser.Id;
@@ -20,11 +21,10 @@ namespace UserManagement.Services
             user.Surname = graphUser.Surname;
             user.UserPrincipalName = graphUser.UserPrincipalName;
             user.Email = graphUser.Mail;
-
             return user;
         }
 
-        public static User migrateToUserGraph(UserModel objUser)
+        public User migrateToUserGraph(UserModel objUser)
         {
             User userGraph = new User();
             userGraph.AccountEnabled = objUser.AccountEnabled;

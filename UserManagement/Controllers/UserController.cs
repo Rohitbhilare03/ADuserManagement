@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Graph;
 using UserManagement.Services;
 using UserManagement.Models;
 using System.Net;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using UserManagement.Services.Interfaces;
 
 namespace UserManagement.Controllers
 {
@@ -16,9 +16,21 @@ namespace UserManagement.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        // GET: api/<UserController>
+        private readonly IDataHandler _dataHandler;
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(IDataHandler dataHandler, ILogger<UserController> logger)
+        {
+            _dataHandler = dataHandler;
+            _logger = logger;
+        }
+
+       
+
+      
         [HttpGet]
-        public async Task<OkObjectResult> Get()
+        [ProducesResponseType(typeof(IEnumerable<UserModel>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<UserModel>>> Get()
         {
             users users = new users();
             try
@@ -28,7 +40,7 @@ namespace UserManagement.Controllers
                 var userList = await client.Users.Request().GetAsync();
                 foreach (var user in userList)
                 {
-                    var objUser = DataHandler.UserProperty(user);
+                    var objUser = _dataHandler.UserProperty(user);
                     users.Totalusers.Add(objUser);
                 }
                 users.totalResults = users.Totalusers.Count;
@@ -38,7 +50,7 @@ namespace UserManagement.Controllers
             {
                 if (ex.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    return Ok(ex.Message);
+                    return BadRequest();
                 }
                 else
                 {
@@ -47,23 +59,25 @@ namespace UserManagement.Controllers
             }
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public async Task<OkObjectResult> Get(string id)
+        [HttpGet("{id:length(36)}", Name = "GetUser")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(UserModel), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<UserModel>> Get(string id)
         {
             try
             {
                 UserModel users = new UserModel();
                 GraphServiceClient client = await GraphClient.GetServiceClient();
                 var user = await client.Users[id].Request().GetAsync();
-                users = DataHandler.UserProperty(user);
+                users = _dataHandler.UserProperty(user);
                 return Ok(users);
             }
-            catch(ServiceException ex)
+            catch (ServiceException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.BadRequest)
+                if (ex.StatusCode == HttpStatusCode.NotFound)
                 {
-                    return Ok(ex.Message);
+                    _logger.LogError($"User with id : {id} not found");
+                    return NotFound();
                 }
                 else
                 {
@@ -72,40 +86,30 @@ namespace UserManagement.Controllers
 
             }
         }
-
-        // POST api/<UserController>
         [HttpPost]
-        public async Task<ActionResult<responseObject>> Post([FromBody] UserModel objUser)
+        [ProducesResponseType(typeof(UserModel), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<UserModel>> Post([FromBody] UserModel objUser)
         {
-           GraphServiceClient client = await GraphClient.GetServiceClient();
-           var user =  DataHandler.migrateToUserGraph(objUser);
-            responseObject resObj = new responseObject();
+            GraphServiceClient client = await GraphClient.GetServiceClient();
+            var user = _dataHandler.migrateToUserGraph(objUser);
             try
             {
-                var response = await client.Users
+                var UserAdded = await client.Users
                 .Request()
                 .AddAsync(user);
 
-                objUser.Id = response.Id;
-                resObj.data = objUser;
-                resObj.status = true;
-                return Ok(resObj);
+                objUser.Id = UserAdded.Id;
+
+                return CreatedAtRoute("GetUser", new { id = UserAdded.Id }, objUser);
             }
-            catch(Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }
-           
+
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:length(36)}")]
         public async Task<OkObjectResult> Delete(string id)
         {
             try
@@ -116,11 +120,11 @@ namespace UserManagement.Controllers
                     .DeleteAsync();
                 return Ok(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Ok(BadRequest());
             }
-          
+
         }
     }
 }
