@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using UserManagement.Repository;
+using UserManagement.Repository.Interface;
 using UserManagement.Services;
 using UserManagement.Services.Interfaces;
 
@@ -30,6 +32,9 @@ namespace UserManagement
         {
             services.AddControllers();
             services.AddTransient<IDataHandler, DataHandler>();
+            services.AddTransient<IGraphClient, GraphClient>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ADUserManagement", Version = "v1" });

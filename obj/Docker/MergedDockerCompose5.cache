@@ -1,0 +1,38 @@
+services:
+  usermanagement:
+    build:
+      context: D:\Port-ability\ADUser\ADuserManagement
+      dockerfile: UserManagement/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: UserManagement
+      target: base
+    container_name: UserManagement
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: usermanagement:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/netcoreapp3.1/UserManagement.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 5003
+      target: 80
+    - published: 5002
+      target: 443
+    tty: true
+    volumes:
+    - D:\Port-ability\ADUser\ADuserManagement\UserManagement:/app:rw
+    - C:\Users\Admin\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\Admin\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\Admin\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\Admin\.nuget\packages:/root/.nuget/packages:ro
+    - D:\Port-ability\ADUser\ADuserManagement:/src:rw
+version: '3.4'

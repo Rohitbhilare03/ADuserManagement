@@ -7,10 +7,11 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using UserManagement.Models;
+using UserManagement.Services.Interfaces;
 
 namespace UserManagement.Services
 {
-    public class GraphClient
+    public class GraphClient : IGraphClient
     {
         private static GraphServiceClient graphClient;
         private static IConfiguration configuration;
@@ -21,7 +22,7 @@ namespace UserManagement.Services
         private static string graphResource;
         private static string graphAPIEndpoint;
         private static string authority;
-        static GraphClient()
+        public GraphClient()
         {
             configuration = new ConfigurationBuilder().SetBasePath(System.IO.Directory.GetCurrentDirectory())
                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -31,7 +32,7 @@ namespace UserManagement.Services
             ConfigureAzureAD();
         }
 
-        private static void ConfigureAzureAD()
+        public void ConfigureAzureAD()
         {
             var azureOptions = new ADConfig();
             configuration.Bind("AzureAD", azureOptions);
@@ -44,7 +45,7 @@ namespace UserManagement.Services
             authority = $"{aadInstance}{tenantId}";
         }
 
-        public static async Task<GraphServiceClient> GetServiceClient()
+        public async Task<GraphServiceClient> GetServiceClient()
         {   
             //Getting Graphclient API Endpoints
             var delegateAuthProvider = await AuthProvider();
@@ -52,7 +53,7 @@ namespace UserManagement.Services
             graphClient = new GraphServiceClient(graphAPIEndpoint, delegateAuthProvider);
             return graphClient;
         }
-        private static async Task<DelegateAuthenticationProvider> AuthProvider()
+        public async Task<DelegateAuthenticationProvider> AuthProvider()
         {
             AuthenticationContext authenticationContext = new AuthenticationContext(authority);
             ClientCredential ClientCred = new ClientCredential(clientId, clientSecret);

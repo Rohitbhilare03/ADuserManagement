@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  usermanagement:
+    image: ${DOCKER_REGISTRY-}usermanagement
+    build:
+      context: .
+      dockerfile: UserManagement/Dockerfile

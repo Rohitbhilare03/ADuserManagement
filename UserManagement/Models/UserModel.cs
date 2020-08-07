@@ -14,10 +14,9 @@ namespace UserManagement.Models
     }
     public class UserModel
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public bool? AccountEnabled { get; set; }
         public string DisplayName { get; set; }
-
         public string MailNickname { get; set; }
         public string UserPrincipalName { get; set; }
         public string GivenName { get; set; }

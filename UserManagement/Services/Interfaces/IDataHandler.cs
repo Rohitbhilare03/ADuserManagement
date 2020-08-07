@@ -1,4 +1,5 @@
-﻿using Microsoft.Graph;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace UserManagement.Services.Interfaces
     {
         UserModel UserProperty(User graphUser);
         User migrateToUserGraph(UserModel objUser);
+        GetGroupModel GroupBind(Group group);
+        Task<ActionResult<Group>> AssignDataToAddGroup(GroupModel objGroup);
     }
 }

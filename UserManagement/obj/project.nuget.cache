@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Qi97EPC22I3+YvGzefIcdTAA1tpTx6xp1tLHy/aAoT/o5zn7+wHoWG47vjhrE0Xo3MCvUomvsWPe750zXBYZwQ==",
+  "dgSpecHash": "0hlt3Fm8PgHe4eN6cbC6++AZ42uJ5ijFX461Yy54Ijq4lpt7qOLp97CR8CMVuUVgZUr6gYJnR/iBB29XVPw/iw==",
   "success": true,
   "projectFilePath": "D:\\Port-ability\\ADUser\\ADuserManagement\\UserManagement\\UserManagement.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.openapi\\1.1.4\\microsoft.openapi.1.1.4.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.10.9\\microsoft.visualstudio.azure.containers.tools.targets.1.10.9.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512",
